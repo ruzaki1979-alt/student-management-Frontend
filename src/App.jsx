@@ -5,7 +5,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Navbar from "./components/custom/Navbar";
-import ParentsDashboard from "./pages/parentsDashboard";
+import ParentsDashboard from "./pages/ParentsDashboard";
 import Home from "./pages/Home";
 import SignInPage from "./auth/signin";
 import ProtectedRoute from "./auth/ProtectedRoute";
