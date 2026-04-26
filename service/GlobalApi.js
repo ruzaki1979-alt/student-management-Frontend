@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // const BASE_URL = "http://192.168.1.6:5000/api";
-const BASE_URL = "https://student-management-backend-tx2g.onrender.com/api";
-
+// const BASE_URL = "https://student-management-backend-tx2g.onrender.com/api";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 // create axios instance
 const api = axios.create({

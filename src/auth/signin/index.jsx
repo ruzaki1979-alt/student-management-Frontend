@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GraduationCap, User, Users } from "lucide-react";
+import { GraduationCap, User, Users, Loader2 } from "lucide-react";
 import { loginUser } from "../../../service/GlobalApi";
 
 function SignInPage() {
@@ -14,6 +14,7 @@ function SignInPage() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -23,6 +24,7 @@ function SignInPage() {
   };
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const res = await loginUser({
         role,
@@ -31,7 +33,7 @@ function SignInPage() {
         password: form.password,
       });
 
-      const data = res.data; // axios uses .data
+      const data = res.data;
 
       if (res.status === 200) {
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -46,10 +48,11 @@ function SignInPage() {
     } catch (err) {
       console.error(err);
       alert("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // role icon
   const getIcon = () => {
     if (role === "teacher") return <GraduationCap size={22} />;
     if (role === "student") return <User size={22} />;
@@ -58,9 +61,7 @@ function SignInPage() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
-      {/* Card */}
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
-        {/* Header */}
         <div className="flex flex-col items-center mb-6">
           <div className="mb-2">{getIcon()}</div>
           <h1 className="text-2xl font-bold capitalize">{role} Login</h1>
@@ -69,9 +70,7 @@ function SignInPage() {
           </p>
         </div>
 
-        {/* Form */}
         <div className="flex flex-col gap-4">
-          {/* Student / Parent */}
           {(role === "student" || role === "parent") && (
             <Input
               type="number"
@@ -82,7 +81,6 @@ function SignInPage() {
             />
           )}
 
-          {/* Teacher */}
           {role === "teacher" && (
             <Input
               type="email"
@@ -93,7 +91,6 @@ function SignInPage() {
             />
           )}
 
-          {/* Password */}
           <Input
             type="password"
             name="password"
@@ -102,16 +99,22 @@ function SignInPage() {
             onChange={handleChange}
           />
 
-          {/* Button */}
-          <Button onClick={handleLogin} className="w-full text-lg py-6 mt-2">
-            Login
+          <Button
+            onClick={handleLogin}
+            disabled={loading}
+            className="w-full text-lg py-6 mt-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="animate-spin mr-2" size={20} />
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
           </Button>
         </div>
       </div>
-
-
-
-      
     </div>
   );
 }
